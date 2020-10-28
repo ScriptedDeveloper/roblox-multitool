@@ -39,7 +39,7 @@ beginning = colorama.Fore.GREEN + """
                               | $$                                                                           
                               |__/                         
 
-ROBLOX multitool
+ROBLOX multitool                    Info: Dont put too much Cookies at once in the cookie file otherwise it'll lag!
 
 """
 
@@ -270,6 +270,7 @@ def generate_cookies():
         print(colorama.Fore.RED + 'Nice Try!')
         time.sleep(2)
         generate_cookies()
+    else:
         while number > 0:
             if number == 0:
                 break
@@ -290,23 +291,24 @@ def generate_cookies():
                 os.system('cls' if os.name == 'nt' else 'clear')
                 print(beginning)
                 menu()
-    else:
-        print('Wrong Answer!')
-        generate_cookies()
+
 
 def menu():
     choice = input('1) Cookie Checker\n2) Robux Checker\n3) Credit and Premium Checker\n4) Mass follow\n5) Cookie Generator\nSelect: \n')
     if choice == '1':
-        check_cookie()
-
+        t = threading.Thread(target=check_cookie)
+        t.start()
     elif choice == '2':
-        robux_checker()
+        t = threading.Thread(target=robux_checker)
+        t.start()
 
     elif choice == '3':
-        credit_and_premium_checker()
+        t = threading.Thread(target=credit_and_premium_checker)
+        t.start()
 
     elif choice == '4':
-        mass_follow()
+        t = threading.Thread(target=mass_follow)
+        t.start()
 
     elif choice == '5':
         t = threading.Thread(target=generate_cookies)
