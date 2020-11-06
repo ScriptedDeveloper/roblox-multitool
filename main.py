@@ -52,10 +52,13 @@ def delete_line():
     open("cookies.txt", "w").writelines(data[1:])
 
 def set_cookie():
+    for line in open('cookies.txt', 'r').readlines():
+        l = line.replace('\n', '')
+    new_cookie = f'.ROBLOSECURITY={l}'
     headers = {
             'User-Agent' : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:82.0) Gecko/20100101 Firefox/82.0',
-            'Cookie' : str('.ROBLOSECURITY=') + str(cookie)
-        }
+            'Cookie' : new_cookie
+            }
     session.headers = headers
     session.post('https://auth.roblox.com/v2/logout', headers=headers).json()
 
@@ -267,24 +270,24 @@ def generate_cookies():
     else:
         while number > 0:
             if number == 0:
-                break
                 print(colorama.Fore.RED + 'Finished! Returning to menu..')
                 time.sleep(2)
                 os.system('cls' if os.name == 'nt' else 'clear')
                 print(beginning)
                 menu()
+                break
             number -= 1
             strings = string.ascii_uppercase + string.digits
             result = ''.join(random.choice(strings) for i in range(616))
             open("cookies.txt", "a").write('\n' + '_|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this-will-allow-someone-to-log-in-as-you-and-to-steal-your-ROBUX-and-items.|_' + result) # Not working at the moment
             print(number)
             if number == 0:
-                break
                 print(colorama.Fore.RED + 'Finished! Returning to menu..')
                 time.sleep(2)
                 os.system('cls' if os.name == 'nt' else 'clear')
                 print(beginning)
                 menu()
+                break
 
 
 def menu():
