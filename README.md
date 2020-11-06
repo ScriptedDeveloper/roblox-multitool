@@ -3,7 +3,7 @@
 3. Wait
 4. Find your results in result.txt
 5. Enjoy!
-6. (Maybe) Tell your friends
+6. (Maybe) Tell your friends about my work!
 
 
 
