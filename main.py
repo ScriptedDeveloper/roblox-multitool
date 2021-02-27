@@ -1,3 +1,6 @@
+from time import sleep
+
+
 try:
 
     import requests
@@ -289,9 +292,30 @@ def generate_cookies():
                 menu()
                 break
 
+def group_scraper():
+    print('Running.. This might take a while! Results will be posted here.')
+    while True:
+        id = ''.join(random.choice(string.digits) for i in range(8))
+        group = requests.get('https://groups.roblox.com/v1/groups/' + id)
+        if group.status_code == 200:
+            if group.json()['owner'] == None and group.json()['publicEntryAllowed'] == True:
+                    print(colorama.Fore.GREEN + "https://www.roblox.com/groups/" + str(id))
+
+            else:
+                pass
+
+        elif group.status_code == 400:
+            pass
+
+        else:
+            pass
+
+
+
+
 
 def menu():
-    choice = input('1) Cookie Checker\n2) Robux Checker\n3) Credit and Premium Checker\n4) Mass follow\n5) Cookie Generator\nSelect: \n')
+    choice = input('1) Cookie Checker\n2) Robux Checker\n3) Credit and Premium Checker\n4) Mass follow\n5) Cookie Generator\n6) Group scraper\nSelect: \n')
     if choice == '1':
         t = threading.Thread(target=check_cookie)
         t.start()
@@ -310,6 +334,9 @@ def menu():
     elif choice == '5':
         t = threading.Thread(target=generate_cookies)
         t.start()
+
+    elif choice == '6':
+        t = threading.Thread(target=group_scraper).start()
 
 
 def exit():
