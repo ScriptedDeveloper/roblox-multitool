@@ -6,6 +6,8 @@
 6. (Maybe) Tell your friends about my work!
 
 
+# I apologize for the bad code structure. However, this was one of my first Python projects and since then I improved a lot.
+
 
 
 
