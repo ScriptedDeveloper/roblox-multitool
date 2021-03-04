@@ -63,7 +63,8 @@ def set_cookie():
             'Cookie' : new_cookie
             }
     session.headers = headers
-    session.post('https://auth.roblox.com/v2/logout', headers=headers).json()
+    token = session.post('https://auth.roblox.com', headers=headers)
+    session.headers = token.headers
 
 def check_cookie():
     if os.stat("cookies.txt").st_size == 0:
